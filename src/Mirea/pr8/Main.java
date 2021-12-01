@@ -1,68 +1,28 @@
-package pr8;
+package Mirea.pr8;
 
-import java.util.ArrayList;
-
-/**
- * Main class for starting program and tests.
- */
 public class Main {
-
     public static void main(String[] args) {
-        ArrayList<String> al = new ArrayList<>();
-        al.add("Hi2");
-        al.add("Hi3");
+        UnfairWaitList test1 = new UnfairWaitList();
+        BoundedWaitList test2 = new BoundedWaitList(4);
 
-        WaitList<String> wl = new WaitList<>();
-        wl.add("Hi");
-        wl.add("Hi2");
-        wl.add("Hi3");
-        System.out.println(wl);
-        System.out.println(wl.remove());
-        System.out.println(wl);
-        System.out.println(wl.isEmpty());
-        System.out.println(wl.contains("Hi"));
-        System.out.println(wl.containsAll(al));
+        test1.add("lol");
+        test1.add("kek");
+        test1.add("cheburek");
+        test1.add("NO");
 
-        System.out.println();
+        System.out.println("Here is the content in the list test1: " + test1);
+        test1.remove("NO");
+        test1.remove("lol");
+        System.out.println("Here is the content in the list test1: " + test1);
+        System.out.println("Here is the content in the list test1 after deletion: " + test1);
+        test1.moveToBack("lol");
+        System.out.println("Here is the content in the list test1 after the transfer: " + test1);
 
-        BoundedWaitList<String> bwl = new BoundedWaitList<>(3);
-        bwl.add("foo");
-        bwl.add("foo2");
-        bwl.add("bar");
-        System.out.println(bwl);
-        try{
-            bwl.add("bar2");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        System.out.println();
-        System.out.println(bwl);
-        System.out.println(bwl.getCapacity());
+        test2.add("kek");
+        test2.add("lol");
+        test2.add("orbidol");
+        test2.add("NOOOOOOO");
 
-        System.out.println();
-        bwl = new BoundedWaitList<String>(al);
-        System.out.println(bwl.getCapacity());
-        try{
-            bwl.add("bar2");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        System.out.println();
-
-        UnfairWaitList<Integer> uwl = new UnfairWaitList<>();
-        uwl.add(1);
-        uwl.add(2);
-        uwl.add(23);
-        uwl.add(5);
-        uwl.add(5);
-        uwl.add(6);
-        System.out.println(uwl);
-        uwl.remove(5);
-        System.out.println(uwl);
-        uwl.moveToBack(23);
-        System.out.println(uwl);
-
-
+        System.out.println("In the list test2: " + test2.getCapacity() + " object and here they are:" + test2);
     }
 }
