@@ -1,8 +1,9 @@
 package Pr1516;
 
-
 public interface Item {
-    int getCost();
+    int getPrice();
+
     String getName();
-    String getDescription();
+
+    String getDesc();
 }

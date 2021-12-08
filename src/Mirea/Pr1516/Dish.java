@@ -1,46 +1,33 @@
 package Pr1516;
 
 public final class Dish implements Item {
+    private int price;
+    private String name;
+    private String desc;
 
-    private final int cost;
-    private final String name;
-    private final String description;
+    Dish(String name, String desc){
+        price=0;
+        this.name=name;
 
-
-    public Dish(int cost, String name, String description) throws IllegalArgumentException {
-        if (name.equals("") || name.isEmpty() || description.equals("") || description.isEmpty() || cost < 0)
-            throw new IllegalArgumentException();
-
-        this.cost = cost;
-        this.name = name;
-        this.description = description;
+        this.desc=desc;
+    }
+    public Dish(int price, String name, String desc){
+        if(price<0 || name.equals("") || desc.equals(""))
+            throw new IllegalArgumentException("The argument must be more then 0 and not equals empty symbol.");
+        this.price=price;
+        this.name=name;
+        this.desc=desc;
     }
 
-
-    @Override
-    public int getCost() {
-        return cost;
+    public int getPrice() {
+        return price;
     }
 
-
-    @Override
     public String getName() {
         return name;
     }
 
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Dish{" +
-                "cost=" + cost +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+    public String getDesc() {
+        return desc;
     }
 }

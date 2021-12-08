@@ -1,42 +1,39 @@
 package Pr1516;
 
+import java.util.Enumeration;
+
 public final class Drink implements Item {
+    private int price;
+    private String name;
+    private String desc;
+    private Enumeration type;
 
-    private final int cost;
-    private final String name;
-    private final String description;
+    Drink(String name, String desc){
+        price=0;
+        this.name=name;
 
-    public static final int DEFAULT_COST = 0;
-
-
-    public Drink(String name, String description) throws IllegalArgumentException {
-        if (name.equals("") || name.isEmpty() || description.equals("") || description.isEmpty())
-            throw new IllegalArgumentException();
-
-        this.cost = DEFAULT_COST;
-        this.name = name;
-        this.description = description;
+        this.desc=desc;
+    }
+    public Drink(int price, String name, String desc){
+        this.price=price;
+        this.name=name;
+        this.desc=desc;
     }
 
-
-    public Drink(int cost, String name, String description) {
-        if (name.equals("") || name.isEmpty() || description.equals("") || description.isEmpty() || cost < 0)
-            throw new IllegalArgumentException();
-        this.cost = cost;
-        this.name = name;
-        this.description = description;
-    }
-
-
-    public int getCost() {
-        return cost;
+    public int getPrice() {
+        return price;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDesc() {
+        return desc;
+    }
+
+    public Enumeration getType(){return type;}
+    public void setType(Enumeration type){
+        this.type=type;
     }
 }

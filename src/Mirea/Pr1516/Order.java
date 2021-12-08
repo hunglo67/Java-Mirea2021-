@@ -2,13 +2,27 @@ package Pr1516;
 
 public interface Order {
 
-    boolean add(Item item);
-    boolean removeByName(String name);
-    int removeAllByName(String name);
-    int getCount();
-    Item[] toArray();
-    int getOrderPrice();
-    int countOf(String name);
-    String[] allNames();
-    Item[] toSortedArray();
+    void add(orderItem data);
+
+    boolean remove(String name);
+
+    boolean removeAll(String name);
+
+    int dishQuantity();
+
+    double getCostSummary();
+
+    int dishQuantity(String name);
+
+    String[] getOrdersName();
+
+    orderItem getOrderItem(int i);
+
+    orderItem[] getSortedOrders();
+
+    orderItem[] getOrders();
+
+    String getType();
+
+
 }

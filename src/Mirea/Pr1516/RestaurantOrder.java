@@ -1,76 +1,206 @@
 package Pr1516;
-import Pr1516.util.ItemsSorter;
-import Pr1516.util.MyArrayList;
 
+import java.util.*;
 
 public class RestaurantOrder implements Order {
+    Node firstNode = null;
+    protected String type="local";
 
-    private MyArrayList<Item> items;
-    public boolean add(Item item) {
-        return items.add(item);
+
+    class Node {
+        Node next = null;
+        Node prev = null;
+        orderItem data;
+
+        Node(orderItem data) {
+            this.data = data;
+        }
     }
-    @Override
-    public boolean removeByName(String name) {
-        for (int i = items.size() - 1; i >= 0; --i)
-            if (items.at(i).getName().equals(name)) {
-                items.remove(i);
-                return true;
+
+    public void add(orderItem data) {
+        Node buff = this.firstNode;
+        if (buff == null) {
+            this.firstNode = new Node(data);
+        } else {
+            while (buff.next != null)
+                buff = buff.next;
+
+            buff.next = new Node(data);
+            buff.next.prev = buff;
+        }
+    }
+
+    orderItem getFirst() {
+        Node buff = this.firstNode;
+        this.firstNode = this.firstNode.next;
+
+        return (orderItem) buff.data;
+    }
+
+    public orderItem getOrderItem(int i) {
+        Node buff = this.firstNode;
+        for (int j = 0; j < i; j++) {
+            buff = buff.next;
+        }
+        return (orderItem) buff.data;
+    }
+
+    public void remove(int i) {
+        Node buff = this.firstNode;
+        for (int j = 0; j < i; j++) {
+            buff = buff.next;
+        }
+        if (i == 0) {
+            firstNode = firstNode.next;
+        } else {
+            buff.next.prev = buff.prev;
+            buff.prev.next = buff.next;
+        }
+
+    }
+
+    public boolean remove(String name) {
+        Node lastFind = null;
+
+        Node buff = this.firstNode;
+        Item or = (Item) ((orderItem) getOrderItem(0)).getObj();
+        if (or.getName() == name) {
+            lastFind = this.firstNode;
+        }
+        while (buff.next != null) {
+            buff = buff.next;
+            Item f = (Item) ((orderItem) buff.data).getObj();
+            if (f.getName() == name) {
+                lastFind = buff;
             }
-        return false;
-    }
-    @Override
-    public int removeAllByName(String name) {
-        int count = 0;
-        for (var item : items)
-            if (item.getName().equals(name))
-                ++count;
+        }
 
-        items.removeIf(item -> item.getName().equals(name));
-        return count;
+        if (lastFind != null) {
+            if(lastFind.prev==null){
+                if(lastFind.next==null){
+                    firstNode=null;
+                }else{
+                    lastFind=lastFind.next;
+                    lastFind.prev=null;
+                    firstNode=lastFind;
+                }
+            }else{
+                if(lastFind.next==null){
+                    lastFind.prev.next = null;
+                }else{
+                    lastFind.next.prev = lastFind.prev;
+                    lastFind.prev.next = lastFind.next;
+                }
+            }
+        }
+        return true;
     }
-    @Override
-    public int getCount() {
-        return items.size();
+
+    public boolean removeAll(String name) {
+        Node buff = this.firstNode;
+        Item or = (Item) ((orderItem) getOrderItem(0)).getObj();
+        if (or.getName() == name) {
+            this.firstNode = this.firstNode.next;
+            this.firstNode.prev = null;
+        }
+        while (buff.next != null) {
+            buff = buff.next;
+            Item f = (Item) ((orderItem) buff.data).getObj();
+            if (f.getName() == name) {
+                buff.next.prev = buff.prev;
+                buff.prev.next = buff.next;
+            }
+        }
+        return true;
     }
-    @Override
-    public Item[] toArray() {
-        return (Item[]) items.toArray();
+
+    public orderItem[] getOrders() {
+        orderItem[] result = new orderItem[this.size()];
+        for (int i = 0; i < this.size(); i++)
+            result[i] = (orderItem) this.getOrderItem(i);
+
+        return result;
     }
-    @Override
-    public int getOrderPrice() {
+
+    public String[] getOrdersName() {
+        ArrayList<String> result = new ArrayList<>();
+        for (int i = 0; i < this.size(); i++) {
+            Item it = (Item) ((orderItem) this.getOrderItem(i)).getObj();
+            if (result.contains(it.getName())) {
+            } else {
+                result.add(it.getName());
+            }
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+    public orderItem[] getSortedOrders() {
+        orderItem[] buff = getOrders();
+        Arrays.sort(buff, new Comparator<orderItem>() {
+            public int compare(orderItem o1, orderItem o2) {
+                Item one = (Item) ((orderItem) o1).getObj();
+                Item two = (Item) ((orderItem) o2).getObj();
+                if (one.getPrice() > two.getPrice()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        });
+        return buff;
+    }
+
+    public Item getorderItem(int i) {
+        return (Item) ((orderItem) this.getOrderItem(i)).getObj();
+    }
+
+    public double getCostSummary() {
+        double result = 0;
+        for (int i = 0; i < this.size(); i++)
+            result += this.getorderItem(i).getPrice();
+
+        return result;
+    }
+
+    public int dishQuantity() {
+        return this.size();
+    }
+
+
+    public int dishQuantity(String name) {
         int result = 0;
 
-        for (var item : items)
-            result += item.getCost();
+        if (((Item) ((orderItem) firstNode.data).getObj()).getName() == name)
+            result++;
+
+        Node buff = this.firstNode;
+        while (buff.next != null) {
+            buff = buff.next;
+            Item f = (Item) ((orderItem) buff.data).getObj();
+            if (f.getName() == name) {
+                result++;
+            }
+        }
 
         return result;
     }
-    @Override
-    public int countOf(String name) {
-        int count = 0;
 
-        for (var item : items)
-            if (item.getName() == name)
-                ++count;
-        return count;
-    }
-    @Override
-    public String[] allNames() {
-        var names = new MyArrayList<String>();
 
-        for (var item : items)
-            if (!names.contains(item.getName()))
-                names.add(item.getName());
+    int size() {
+        Node buff = this.firstNode;
+        if (buff == null) {
+            return 0;
+        } else {
+            int n = 1;
+            while (buff.next != null) {
+                n++;
+                buff = buff.next;
+            }
+            return n;
+        }
+    }
 
-        return (String[])names.toArray();
-    }
-    @Override
-    public Item[] toSortedArray() {
-        Item[] result = (Item[])items.toArray();
-        ItemsSorter.sort(result);
-        return result;
-    }
-    public boolean remove(Item item) {
-        return items.remove(item);
+    public String getType() {
+        return "Restaurant";
     }
 }
